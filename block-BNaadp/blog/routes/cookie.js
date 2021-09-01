@@ -6,8 +6,5 @@ var cookieParser = require("cookie-parser");
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
-router.get("/", (req, res) => {
-  res.send("welcome");
-});
 
 module.exports = router;
