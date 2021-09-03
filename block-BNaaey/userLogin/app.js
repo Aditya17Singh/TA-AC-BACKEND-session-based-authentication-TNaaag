@@ -35,9 +35,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
     secret: process.env.SECRET,
-    resave: false,
     saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    store: MongoStore.create({ mongoUrl: "mongodb://localhost/userLogin" }),
   })
 );
 

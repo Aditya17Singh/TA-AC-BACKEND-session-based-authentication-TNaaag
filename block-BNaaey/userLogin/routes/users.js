@@ -8,9 +8,11 @@ router.get("/", function (req, res, next) {
   console.log(req.session);
   res.render("users");
 });
+
 router.get("/register", (req, res, next) => {
   res.render("register");
 });
+
 router.post("/register", (req, res, next) => {
   User.create(req.body, (err, user) => {
     res.redirect("/users/login");
@@ -25,9 +27,10 @@ router.post("/login", (req, res) => {
   var { email, password } = req.body;
   console.log(email, password);
   if (!email || !password) {
-    res.redirect("/users/login");
+    return res.redirect("/users/login");
   }
   User.findOne({ email }, (err, user) => {
+    console.log(req.body, user);
     if (err) return next(err);
     //no user
     if (!user) {
@@ -41,7 +44,7 @@ router.post("/login", (req, res) => {
       }
       //persisit logged in user info
       req.session.userId = user.id;
-      res.redirect("/users");
+      res.redirect("/dashboard");
     });
   });
 });
