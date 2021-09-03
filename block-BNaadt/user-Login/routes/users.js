@@ -9,12 +9,17 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/register", (req, res, next) => {
-  req.flash("error", "Email/Password unique");
-  var error = req.flash("error")[0];
-  res.render("register");
+  res.render("register", { error: req.flash("error")[0] });
 });
 router.post("/register", (req, res, next) => {
   User.create(req.body, (err, user) => {
+    if (err) {
+      if (err.name === "MongoError") {
+        req.flash("error", "This email is taken");
+        return res.redirect("/users/register");
+      }
+      return res.json({ err });
+    }
     res.redirect("/users/login");
   });
 });
