@@ -18,7 +18,7 @@ router.post("/register", (req, res, next) => {
         req.flash("error", "This email is taken");
         return res.redirect("/users/register");
       }
-      return res.json({ err });
+      return res.json({ error });
     }
     res.redirect("/users/login");
   });
@@ -34,7 +34,7 @@ router.post("/login", (req, res) => {
   console.log(email, password);
   if (!email || !password) {
     req.flash("error", "Email/Password required");
-    return res.redirect("/users/login");
+    return res.redirect("/users/register");
   }
   User.findOne({ email }, (err, user) => {
     console.log(req.body, user);
@@ -54,6 +54,11 @@ router.post("/login", (req, res) => {
       res.redirect("/dashboard");
     });
   });
+});
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  // res.cookie("connect.sid");
+  res.redirect("/");
 });
 
 module.exports = router;
