@@ -16,11 +16,11 @@ router.post("/register", (req, res, next) => {
     if (err) {
       if (err.name === "MongoError") {
         req.flash("error", "This email is taken");
-        return res.redirect("/users/register");
+        return res.redirect("/admin/register");
       }
       return res.json({ err });
     }
-    res.redirect("/users/login");
+    res.redirect("/admin/login");
   });
 });
 
@@ -34,20 +34,20 @@ router.post("/login", (req, res) => {
   console.log(email, password);
   if (!email || !password) {
     req.flash("error", "Email/Password required");
-    return res.redirect("/users/login");
+    return res.redirect("/admin/login");
   }
   User.findOne({ email }, (err, user) => {
     console.log(req.body, user);
     if (err) return next(err);
     //no user
     if (!user) {
-      return res.redirect("/users/login");
+      return res.redirect("/admin/login");
     }
     //compare password
     user.verifyPassword(password, (err, result) => {
       if (err) return next(err);
       if (!result) {
-        return res.redirect("/users/login");
+        return res.redirect("/admin/login");
       }
       //persisit logged in user info
       req.session.userId = user.id;
